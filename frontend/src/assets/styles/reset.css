@@ -1,0 +1,37 @@
+html {
+    box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;
+    color: var(--ft-clr);
+}
+
+button {
+    border: none;
+    background: transparent;
+}
+
+ul,
+ol,
+li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+input {
+    border: none;
+    outline: none;
+    background: none;
+    padding: 0;
+    font: inherit;
+    box-shadow: none;
+    -webkit-appearance: none;
+    appearance: none;
+}

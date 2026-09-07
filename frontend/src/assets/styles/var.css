@@ -1,0 +1,30 @@
+:root {
+    --bg: oklch(98.5% .002 247.839);
+    --bg-lighter: color-mix(in srgb, var(--bg) 95%, #fff 5%);
+    --bg-lightest: color-mix(in srgb, var(--bg) 90%, #fff 10%);
+    --bg-darker: color-mix(in srgb, var(--bg) 98%, #000 2%);
+    --bg-darkest: color-mix(in srgb, var(--bg) 94%, #000 6%);
+
+    --radius: 8px;
+    --radius-bigger: 12px;
+    --radius-biggest: 16px;
+
+    --border: 1px solid oklch(87.2% .01 258.338);
+    --boarder-darker: 1px solid oklch(75.552% 0.00853 254.049);
+    --border-darkest: 1px solid oklch(63.219% 0.00701 255.662);
+
+    --padding: 16px;
+    --padding-smaller: 12px;
+    --padding-smallest: 8px;
+    --padding-bigger: 20px;
+    --padding-biggest: 24px;
+
+    --gap: 8px;
+
+    --clr: #2c2c2c;
+    --sz: 16px;
+
+    --transition: all 0.25s ease;
+}
+
+:root.dark {}

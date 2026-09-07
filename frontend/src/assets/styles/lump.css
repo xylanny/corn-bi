@@ -1,0 +1,26 @@
+.button {
+    border: var(--border);
+    padding: var(--padding-smaller);
+
+    border-radius: var(--radius);
+    font-size: var(--ft-sz);
+    cursor: pointer;
+    background: var(--bg);
+
+    transition: var(--transition);
+}
+
+.button.darker {
+    background: var(--bg-darker);
+}
+
+.button:hover {
+    background: var(--bg-darkest);
+}
+
+.button:disabled {
+    color: color-mix(in srgb, var(--ft-clr) 10%, transparent);
+    background: var(--bg-lighter);
+    cursor: not-allowed;
+    opacity: 0.5;
+}
