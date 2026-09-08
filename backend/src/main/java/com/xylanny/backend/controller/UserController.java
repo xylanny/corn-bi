@@ -33,7 +33,7 @@ public class UserController {
         return Result.success(userVO);
     }
 
-    @PostMapping("/sendEmailCode")
+    @PostMapping("/mail")
     public Result<Void> sendEmailCode(@RequestParam String userEmail) {
         userService.sendRegisterEmailCode(userEmail);
         return Result.success(null);
