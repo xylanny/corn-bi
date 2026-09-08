@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -20,7 +21,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/register")
-    public Result<UserVO> register(UserRegisterDTO userRegisterDTO){
+    public Result<UserVO> register(@RequestBody UserRegisterDTO userRegisterDTO){
 
         UserVO userVO = userService.register(
                 userRegisterDTO.getUserName(),
@@ -40,7 +41,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public Result<UserVO> login(UserLoginDTO userLoginDTO){
+    public Result<UserVO> login(@RequestBody UserLoginDTO userLoginDTO){
         UserVO userVO = userService.login(
                 userLoginDTO.getUserEmail(),
                 userLoginDTO.getUserPassword()
