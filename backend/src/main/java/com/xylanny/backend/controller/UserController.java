@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/user")
@@ -24,11 +25,18 @@ public class UserController {
         UserVO userVO = userService.register(
                 userRegisterDTO.getUserName(),
                 userRegisterDTO.getUserEmail(),
+                userRegisterDTO.getEmailCode(),
                 userRegisterDTO.getUserPassword(),
                 userRegisterDTO.getCheckedPassword()
         );
 
         return Result.success(userVO);
+    }
+
+    @PostMapping("/sendEmailCode")
+    public Result<Void> sendEmailCode(@RequestParam String userEmail) {
+        userService.sendRegisterEmailCode(userEmail);
+        return Result.success(null);
     }
 
     @PostMapping("/login")

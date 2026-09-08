@@ -23,6 +23,19 @@ public interface UserService  {
     UserVO register(String userName, String userEmail, String userPassword, String checkPassword);
 
     /**
+     * 向邮箱发送注册验证码
+     *
+     * @param userEmail 收件邮箱
+     */
+    void sendRegisterEmailCode(String userEmail);
+
+    /**
+     * 用户注册并校验邮箱验证码
+     */
+    UserVO register(String userName, String userEmail, String emailCode,
+                    String userPassword, String checkPassword);
+
+    /**
      * 用户登录
      *
      * @param userEmail 用户邮箱

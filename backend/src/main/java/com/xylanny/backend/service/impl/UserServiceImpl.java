@@ -6,11 +6,11 @@ import com.xylanny.backend.model.dto.UserVO;
 import com.xylanny.backend.model.entity.User;
 import com.xylanny.backend.model.enums.BusinessCode;
 import com.xylanny.backend.service.UserService;
+import com.xylanny.backend.service.EmailService;
 import com.xylanny.backend.mapper.UserMapper;
 import com.xylanny.backend.utils.TokenUtils;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.builder.BuilderException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -30,8 +30,31 @@ public class UserServiceImpl implements UserService {
     @Resource
     private TokenUtils tokenUtils;
 
+    @Resource
+    private EmailService emailService;
+
     @Override
     public UserVO register(String userName, String userEmail, String userPassword, String checkPassword) {
+        return registerInternal(userName, userEmail, userPassword, checkPassword);
+    }
+
+    @Override
+    public UserVO register(String userName, String userEmail, String emailCode,
+                           String userPassword, String checkPassword) {
+        if (StringUtils.isAnyBlank(userName, userEmail, emailCode, userPassword, checkPassword)){
+            throw new BusinessException(BusinessCode.PARAMS_MISSING);
+        }
+        emailService.verifyRegisterCode(userEmail, emailCode);
+        return registerInternal(userName, userEmail, userPassword, checkPassword);
+    }
+
+    @Override
+    public void sendRegisterEmailCode(String userEmail) {
+        emailService.sendRegisterCode(userEmail);
+    }
+
+    private UserVO registerInternal(String userName, String userEmail,
+                                    String userPassword, String checkPassword) {
         if (StringUtils.isAnyBlank(userName, userEmail, userPassword, checkPassword)){
             throw new BusinessException(BusinessCode.PARAMS_MISSING);
         }

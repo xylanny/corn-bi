@@ -61,19 +61,6 @@
             <scope>runtime</scope>
         </dependency>
 <!--        Mybatis Plus-->
-<!--
-包含了spring-boot-starter-jdbc
-（默认内置的高性能数据库连接池实现HikariCP，也是该依赖的核心；
-还提供了实用的JdbcTemplate工具类，
-集成了 Spring 的声明式事务管理（在同一个连接中，将多个数据库操作捆绑到一个原子事务中，确保数据一致性）
-但是不包含任何特定数据库的通信协议实现，因此还需要上面的JDBC Driver依赖
-）
-数据库连接池就是缓存数据库连接的容器，用于复用已创建的数据库连接，避免每次操作数据库时都重新建立和销毁连接
-Mybatis Plus在spring-boot-starter-jdbc基础上：
-1.将查询结果映射为Java对象
-2.可以通过继承BaseMapper，自动生成增删改查SQL语句，简化开发
-3. ......
--->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
@@ -89,6 +76,10 @@ Mybatis Plus在spring-boot-starter-jdbc基础上：
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
             <version>5.8.8</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
     </dependencies>
 

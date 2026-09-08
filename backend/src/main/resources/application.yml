@@ -10,8 +10,20 @@ springdoc:
     path: /swagger-ui/index.html
     tags-sorter: alpha
     operations-sorter: method
-    persist-authorization: true # ??????????Token?Session Id?
+    persist-authorization: true
+# 邮箱操作配置
 spring:
+  mail:
+    host: ${MAIL_HOST:smtp.qq.com} # 指定QQ邮箱的SMTP服务器地址
+    port: ${MAIL_PORT:587} # 连接端口
+    username: ${MAIL_USERNAME:2597466845@qq.com} # 接收发件人邮箱账号
+    password: ${MAIL_PASSWORD:sqkrreazodtdebdi} # 接收授权码
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true # 支持TLS加密(端口)
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${MYSQL_DATASOURCE_URL:jdbc:mysql://localhost:3306/corn_bi_db}
@@ -26,5 +38,5 @@ mybatis-plus:
       logic-delete-value: 1
       logic-not-delete-value: 0
 auth:
-  token-secret: ${AUTH_TOKEN_SECRET:dev-auth-token-secret} # JWT?????
-  token-expire-seconds: 2592000 # Token????????????30?
+  token-secret: ${AUTH_TOKEN_SECRET:dev-auth-token-secret}
+  token-expire-seconds: 2592000
