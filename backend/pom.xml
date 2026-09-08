@@ -84,6 +84,12 @@ Mybatis Plus在spring-boot-starter-jdbc基础上：
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
+<!--        Hutool-->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.8.8</version>
+        </dependency>
     </dependencies>
 
     <build>

@@ -6,6 +6,8 @@ import com.xylanny.backend.model.dto.UserRegisterDTO;
 import com.xylanny.backend.model.dto.UserVO;
 import com.xylanny.backend.service.UserService;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,5 +40,14 @@ public class UserController {
 
         return Result.success(userVO);
     }
-    
+
+    @PostMapping("/message")
+    @SecurityRequirement(name = "bearerAuth")
+    public Result<UserVO> getUserByAuthorization(HttpServletRequest request){
+        String authorization = request.getHeader("Authorization");
+
+        UserVO userVO = userService.getUserByAuthorization(authorization);
+
+        return Result.success(userVO);
+    }
 }

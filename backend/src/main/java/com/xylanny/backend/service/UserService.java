@@ -38,4 +38,12 @@ public interface UserService  {
      * @return 去敏的用户信息
      */
     public UserVO getUserVO(User user);
+
+    /**
+     * 获取当前登录用户
+     *
+     * @param authorization 请求头中的Authorization字符串
+     * @return
+     */
+    public UserVO getUserByAuthorization(String authorization);
 }

@@ -7,8 +7,10 @@ import com.xylanny.backend.model.entity.User;
 import com.xylanny.backend.model.enums.BusinessCode;
 import com.xylanny.backend.service.UserService;
 import com.xylanny.backend.mapper.UserMapper;
+import com.xylanny.backend.utils.TokenUtils;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.builder.BuilderException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,9 @@ public class UserServiceImpl implements UserService {
 
     @Resource
     private UserMapper userMapper;
+
+    @Resource
+    private TokenUtils tokenUtils;
 
     @Override
     public UserVO register(String userName, String userEmail, String userPassword, String checkPassword) {
@@ -61,6 +66,8 @@ public class UserServiceImpl implements UserService {
 
         // 去敏
         UserVO userVO = this.getUserVO(user);
+        // 加入token
+        userVO.setToken(tokenUtils.createToken(user.getId()));
 
         return userVO;
     }
@@ -87,6 +94,31 @@ public class UserServiceImpl implements UserService {
 
         // 去敏
         UserVO userVO = this.getUserVO(user);
+        // 加入token
+        userVO.setToken(tokenUtils.createToken(user.getId()));
+
+        return userVO;
+    }
+
+    /**
+     * 获取当前登录用户
+     *
+     * @param authorization 请求头中的Authorization字符串
+     * @return
+     */
+    @Override
+    public UserVO getUserByAuthorization(String authorization) {
+        long userId = tokenUtils.getUserId(authorization);
+
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(User::getId, userId);
+        User currentUser = userMapper.selectOne(queryWrapper);
+
+        if (currentUser == null) {
+            throw new BusinessException(BusinessCode.NOT_LOGIN);
+        }
+
+        UserVO userVO = this.getUserVO(currentUser);
 
         return userVO;
     }

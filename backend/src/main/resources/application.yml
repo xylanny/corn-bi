@@ -10,19 +10,21 @@ springdoc:
     path: /swagger-ui/index.html
     tags-sorter: alpha
     operations-sorter: method
+    persist-authorization: true # ??????????Token?Session Id?
 spring:
-  # ???????
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${MYSQL_DATASOURCE_URL:jdbc:mysql://localhost:3306/corn_bi_db}
     username: ${MYSQL_DATASOURCE_USERNAME:root}
     password: ${MYSQL_DATASOURCE_PASSWORD:angen452.}
-# Mybatis plus??
 mybatis-plus:
   configuration:
-    map-underscore-to-camel-case: true # ??????? useName <-> user_name??????????????????
+    map-underscore-to-camel-case: true
   global-config:
     db-config:
-      logic-delete-field: isDelete # ????????????
-      logic-delete-value: 1 # ?????????? 1?
-      logic-not-delete-value: 0 # ?????????? 0?
+      logic-delete-field: isDelete
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+auth:
+  token-secret: ${AUTH_TOKEN_SECRET:dev-auth-token-secret} # JWT?????
+  token-expire-seconds: 2592000 # Token????????????30?
