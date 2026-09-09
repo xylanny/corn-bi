@@ -1,3 +1,4 @@
+
 export interface Result<T = any> {
   code: number;
   message: string;
@@ -5,8 +6,8 @@ export interface Result<T = any> {
 }
 
 export interface UserUpdateDTO {
-  userName?: string;
-  userAvatar?: string;
+  userName: string;
+  userAvatar: string;
 }
 
 export interface ResultUserVO {
@@ -37,4 +38,27 @@ export interface UserRegisterDTO {
 export interface UserLoginDTO {
   userEmail: string;
   userPassword: string;
+}
+
+export interface KMeansDTO {
+  file: string;
+  columns: string[];
+  k: number;
+  maxIterations: number;
+  tolerance: number;
+  seed: number;
+}
+
+export interface KMeansVO {
+  k: number;
+  labels: number[];
+  centroids: number[][];
+  silhouetteScore: number;
+  nums: number[];
+}
+
+export interface ResultKMeansVO {
+  code: number;
+  message: string;
+  data: KMeansVO;
 }

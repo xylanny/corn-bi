@@ -108,10 +108,7 @@ function generateModules(doc: Doc): void {
     fs.mkdirSync(MODULES_DIR, { recursive: true });
 
   for (const [tag, items] of groups) {
-    // 生成模块名（用于文件名和对象名）
     const moduleName = tag.replace(/-controller$/, "").replace(/-/g, "_");
-
-    // !!!
     const apiName = moduleName + "API";
 
     const lines: string[] = ["import client from '@/api/client';"];
@@ -122,12 +119,50 @@ function generateModules(doc: Doc): void {
       const fn =
         op.operationId ||
         `${method}${pathUrl.replace(/[{}]/g, "").replace(/\//g, "_")}`;
-      const resp = op.responses?.["200"]?.content?.["*/*"]?.schema?.$ref;
-      const respType = resp ? cleanRef(resp) : "void";
-      if (respType !== "ResultVoid") types.add(toPascal(respType));
 
-      const body = op.requestBody?.content?.["application/json"]?.schema;
-      const bodyRef = body?.$ref;
+      const respSchema = op.responses?.["200"]?.content?.["*/*"]?.schema;
+      let dataType = "any";
+
+      if (respSchema?.$ref) {
+        const refName = cleanRef(respSchema.$ref);
+        if (refName === "ResultVoid") {
+          dataType = "void";
+        } else if (refName.startsWith("Result")) {
+          const innerType = refName.replace(/^Result/, "");
+          if (innerType && innerType !== "Void") {
+            dataType = toPascal(innerType);
+            types.add(dataType);
+          } else {
+            dataType = "void";
+          }
+        } else {
+          dataType = toPascal(refName);
+          types.add(dataType);
+        }
+      } else if (respSchema?.type === "array") {
+        dataType = `${toTS(respSchema.items)}[]`;
+      } else if (respSchema?.type === "object") {
+        dataType = "Record<string, any>";
+      }
+
+      const returnType =
+        dataType === "void" ? "Promise<void>" : `Promise<Result<${dataType}>>`;
+
+      const requestBody = op.requestBody;
+      let bodySchema = requestBody?.content?.["application/json"]?.schema;
+      let isMultipart = false;
+
+      if (!bodySchema && requestBody?.content) {
+        for (const contentType of Object.keys(requestBody.content)) {
+          if (contentType.startsWith("multipart/")) {
+            bodySchema = requestBody.content[contentType].schema;
+            isMultipart = true;
+            break;
+          }
+        }
+      }
+
+      const bodyRef = bodySchema?.$ref;
       const query = (op.parameters || []).filter((p) => p.in === "query");
       const pathP = (op.parameters || []).filter((p) => p.in === "path");
 
@@ -140,8 +175,11 @@ function generateModules(doc: Doc): void {
         args.push(`data: ${t}`);
         types.add(t);
         hasBody = true;
-      } else if (body?.type === "object" && body.properties) {
+      } else if (bodySchema?.type === "object" && bodySchema.properties) {
         args.push("data: Record<string, any>");
+        hasBody = true;
+      } else if (bodySchema?.type === "string") {
+        args.push("data: string");
         hasBody = true;
       }
 
@@ -162,23 +200,29 @@ function generateModules(doc: Doc): void {
           "?" + query.map((p) => `${p.name}=\${query.${p.name}}`).join("&");
       }
 
-      const returnType =
-        respType === "ResultVoid"
-          ? "Promise<void>"
-          : `Promise<${toPascal(respType)}>`;
       const bodyArg = hasBody ? ", data" : "";
       const methodCall = method === "get" ? "get" : method;
       const urlArg = `\`${url}\``;
 
       funcs.push(`  ${fn}: (${args.join(", ")}): ${returnType} => {`);
-      funcs.push(`    return client.${methodCall}(${urlArg}${bodyArg});`);
+      if (isMultipart && hasBody) {
+        funcs.push(`    return client.${methodCall}(${urlArg}, data);`);
+      } else {
+        funcs.push(`    return client.${methodCall}(${urlArg}${bodyArg});`);
+      }
       funcs.push(`  },`);
     }
 
     const imports = Array.from(types)
       .filter((t) => t !== "ResultVoid")
       .join(", ");
-    if (imports) lines.push(`import type { ${imports} } from '../types';`);
+    if (imports) {
+      lines.push(
+        `import type { Result${imports ? `, ${imports}` : ""} } from '../types';`,
+      );
+    } else {
+      lines.push(`import type { Result } from '../types';`);
+    }
 
     lines.push("", `export const ${apiName} = {`, ...funcs, "};");
 
