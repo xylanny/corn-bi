@@ -12,7 +12,11 @@
           <label class="auth-text" v-for="(_, key) in loginForm" :key="key">
             <input
               v-model="loginForm[key]"
-              type="text"
+              :type="
+                ['userPassword', 'checkedPassword'].includes(key)
+                  ? 'password'
+                  : 'text'
+              "
               :class="{ active: loginForm[key] }"
               required
             />
