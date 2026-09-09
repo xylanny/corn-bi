@@ -1,0 +1,45 @@
+server:
+  address: 0.0.0.0
+  port: 8080
+  servlet:
+    context-path: /api
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui/index.html
+    tags-sorter: alpha
+    operations-sorter: method
+    persist-authorization: true
+# 邮箱操作配置
+spring:
+  mail:
+    host: ${MAIL_HOST:smtp.qq.com} # 指定QQ邮箱的SMTP服务器地址
+    port: ${MAIL_PORT:587} # 连接端口
+    username: ${MAIL_USERNAME:2597466845@qq.com} # 接收发件人邮箱账号
+    password: ${MAIL_PASSWORD:sqkrreazodtdebdi} # 接收授权码
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true # 支持TLS加密(端口)
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${MYSQL_DATASOURCE_URL:jdbc:mysql://localhost:3306/corn_bi_db}
+    username: ${MYSQL_DATASOURCE_USERNAME:root}
+    password: ${MYSQL_DATASOURCE_PASSWORD:angen452.}
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+  global-config:
+    db-config:
+      logic-delete-field: isDelete
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+auth:
+  token-secret: ${AUTH_TOKEN_SECRET:dev-auth-token-secret}
+  token-expire-seconds: 2592000
+app:
+  cors:
+    allowed-origin: ${APP_CORS_ALLOWED_ORIGINS:http://localhost:3000}
