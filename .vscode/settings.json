@@ -1,3 +1,6 @@
 {
-  "cSpell.words": ["buaich", "pinia", "vueuse", "xylanny"]
+  "cSpell.words": ["buaich", "pinia", "vueuse", "xylanny"],
+  "files.associations": {
+    "CODEOWNERS": "plaintext"
+  }
 }
