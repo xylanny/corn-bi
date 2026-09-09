@@ -33,6 +33,14 @@ const routes: RouteRecordRaw[] = [
         path: "table",
         component: () => import("@/pages/Table.vue"),
       },
+      {
+        path: "k-means",
+        component: () => import("@/pages/KMeans.vue"),
+      },
+      {
+        path: "chart",
+        component: () => import("@/pages/Chart.vue"),
+      },
     ],
   },
   {

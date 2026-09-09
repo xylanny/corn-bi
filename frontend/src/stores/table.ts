@@ -1,6 +1,6 @@
 import type { Table, TableRow } from "@/types";
-// import { datasetAPI } from "@/api";
-// import type { KMeanData, KMeanReq } from "@/api/types";
+import { tableAPI } from "@/api/modules/table";
+import type { KMeansVO, KMeansDTO } from "@/api/types";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 import * as XLSX from "xlsx";
@@ -160,43 +160,40 @@ export const useTableStore = defineStore("table", () => {
     }
   }
 
-  // async function analysisByKMeans(
-  //   params: Omit<KMeanReq, "file">,
-  // ): Promise<KMeanData | null> {
-  //   // 若表没有数据时
-  //   if (table.value.rows.length === 0) {
-  //     throw new Error("no data in table can be analyzed");
-  //   }
+  async function analysisByKMeans(
+    params: Omit<KMeansDTO, "file">,
+  ): Promise<KMeansVO | null> {
+    // 若表没有数据时
+    if (table.value.rows.length === 0) {
+      throw new Error("no data in table can be analyzed");
+    }
 
-  //   // 创建表单数据结构，添加数据项
-  //   const formData = new FormData();
-  //   formData.append("file", exportTableToFile(table.value, "csv", false));
+    // 创建表单数据结构，添加数据项
+    const formData = new FormData();
+    formData.append("file", exportTableToFile(table.value, "csv", false));
 
-  //   if (params.k !== undefined) formData.append("k", String(params.k));
-  //   if (params.maxIterations !== undefined) {
-  //     formData.append("maxIterations", String(params.maxIterations));
-  //   }
-  //   if (params.tolerance !== undefined) {
-  //     formData.append("tolerance", String(params.tolerance));
-  //   }
-  //   if (params.seed !== undefined) formData.append("seed", String(params.seed));
-  //   for (const column of params.columns ?? []) {
-  //     formData.append("columns", column);
-  //   }
+    if (params.k !== undefined) formData.append("k", String(params.k));
+    if (params.maxIterations !== undefined) {
+      formData.append("maxIterations", String(params.maxIterations));
+    }
+    if (params.tolerance !== undefined) {
+      formData.append("tolerance", String(params.tolerance));
+    }
+    if (params.seed !== undefined) formData.append("seed", String(params.seed));
+    for (const column of params.columns ?? []) {
+      formData.append("columns", column);
+    }
 
-  //   // 接收服务器返回的请求体
-  //   const responseBody = await datasetAPI.analysisByKmeans(
-  //     formData as unknown as KMeanReq,
-  //   );
-  //   const responseBodyJson = await responseBody.json();
+    // 接收服务器返回的请求体
+    const responseBody = await tableAPI.analysisByKmeans(formData as KMeansDTO);
 
-  //   if (responseBodyJson.code !== 0) {
-  //     throw new Error(responseBodyJson.message ?? "K-Means analysis failed");
-  //   }
+    if (responseBody.code !== 20000) {
+      throw new Error(responseBody.message ?? "K-Means analysis failed");
+    }
 
-  //   // 返回请求体中的data对象
-  //   return responseBodyJson.data ?? null;
-  // }
+    // 返回请求体中的data对象
+    return responseBody.data ?? null;
+  }
 
   function isValidFileType(file: File): boolean {
     const validTypes = [
@@ -236,9 +233,9 @@ export const useTableStore = defineStore("table", () => {
     updateRow,
     deleteRow,
     exportTableToFile,
-    // analysisByKMeans,
     isValidFileType,
     resetError,
     clearTable,
+    analysisByKMeans,
   };
 });

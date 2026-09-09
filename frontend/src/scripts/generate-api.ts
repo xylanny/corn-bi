@@ -54,7 +54,7 @@ function toTS(schema?: Schema): string {
   if (schema.type === "object") {
     if (!schema.properties) return "Record<string, any>";
     const props = Object.entries(schema.properties)
-      .map(([k, v]) => `${k}${v.nullable ? "?" : ""}: ${toTS(v)}`)
+      .map(([k, v]) => `${k}?: ${toTS(v)}`) // 所有字段改为可选
       .join("; ");
     return `{ ${props} }`;
   }
@@ -80,7 +80,7 @@ function generateTypes(schemas: Record<string, Schema>): string {
     if (schema.type === "object" && schema.properties) {
       lines.push(`export interface ${toPascal(name)} {`);
       for (const [k, v] of Object.entries(schema.properties)) {
-        lines.push(`  ${k}${v.nullable ? "?" : ""}: ${toTS(v)};`);
+        lines.push(`  ${k}?: ${toTS(v)};`); // 所有字段改为可选
       }
       lines.push("}\n");
     } else {
@@ -108,10 +108,7 @@ function generateModules(doc: Doc): void {
     fs.mkdirSync(MODULES_DIR, { recursive: true });
 
   for (const [tag, items] of groups) {
-    // 生成模块名（用于文件名和对象名）
     const moduleName = tag.replace(/-controller$/, "").replace(/-/g, "_");
-
-    // !!!
     const apiName = moduleName + "API";
 
     const lines: string[] = ["import client from '@/api/client';"];
@@ -122,12 +119,55 @@ function generateModules(doc: Doc): void {
       const fn =
         op.operationId ||
         `${method}${pathUrl.replace(/[{}]/g, "").replace(/\//g, "_")}`;
-      const resp = op.responses?.["200"]?.content?.["*/*"]?.schema?.$ref;
-      const respType = resp ? cleanRef(resp) : "void";
-      if (respType !== "ResultVoid") types.add(toPascal(respType));
 
-      const body = op.requestBody?.content?.["application/json"]?.schema;
-      const bodyRef = body?.$ref;
+      const respSchema = op.responses?.["200"]?.content?.["*/*"]?.schema;
+      let dataType = "any";
+      let isVoid = false;
+
+      if (respSchema?.$ref) {
+        const refName = cleanRef(respSchema.$ref);
+        if (refName === "ResultVoid") {
+          isVoid = true;
+          dataType = "void";
+        } else if (refName.startsWith("Result")) {
+          const innerType = refName.replace(/^Result/, "");
+          if (innerType && innerType !== "Void") {
+            dataType = toPascal(innerType);
+            types.add(dataType);
+          } else {
+            isVoid = true;
+            dataType = "void";
+          }
+        } else {
+          dataType = toPascal(refName);
+          types.add(dataType);
+        }
+      } else if (respSchema?.type === "array") {
+        dataType = `${toTS(respSchema.items)}[]`;
+      } else if (respSchema?.type === "object") {
+        dataType = "Record<string, any>";
+      }
+
+      // !!!根据是否为 void 决定返回类型
+      const returnType = isVoid
+        ? "Promise<void>"
+        : `Promise<Result<${dataType}>>`;
+
+      const requestBody = op.requestBody;
+      let bodySchema = requestBody?.content?.["application/json"]?.schema;
+      let isMultipart = false;
+
+      if (!bodySchema && requestBody?.content) {
+        for (const contentType of Object.keys(requestBody.content)) {
+          if (contentType.startsWith("multipart/")) {
+            bodySchema = requestBody.content[contentType].schema;
+            isMultipart = true;
+            break;
+          }
+        }
+      }
+
+      const bodyRef = bodySchema?.$ref;
       const query = (op.parameters || []).filter((p) => p.in === "query");
       const pathP = (op.parameters || []).filter((p) => p.in === "path");
 
@@ -140,14 +180,17 @@ function generateModules(doc: Doc): void {
         args.push(`data: ${t}`);
         types.add(t);
         hasBody = true;
-      } else if (body?.type === "object" && body.properties) {
+      } else if (bodySchema?.type === "object" && bodySchema.properties) {
         args.push("data: Record<string, any>");
+        hasBody = true;
+      } else if (bodySchema?.type === "string") {
+        args.push("data: string");
         hasBody = true;
       }
 
       if (pathP.length) {
         args.push(
-          `path: { ${pathP.map((p) => `${p.name}: ${p.schema?.type || "string"}`).join("; ")} }`,
+          `path: { ${pathP.map((p) => `${p.name}?: ${p.schema?.type || "string"}`).join("; ")} }`,
         );
         for (const p of pathP)
           url = url.replace(`{${p.name}}`, `\${path.${p.name}}`);
@@ -162,23 +205,43 @@ function generateModules(doc: Doc): void {
           "?" + query.map((p) => `${p.name}=\${query.${p.name}}`).join("&");
       }
 
-      const returnType =
-        respType === "ResultVoid"
-          ? "Promise<void>"
-          : `Promise<${toPascal(respType)}>`;
       const bodyArg = hasBody ? ", data" : "";
       const methodCall = method === "get" ? "get" : method;
       const urlArg = `\`${url}\``;
 
       funcs.push(`  ${fn}: (${args.join(", ")}): ${returnType} => {`);
-      funcs.push(`    return client.${methodCall}(${urlArg}${bodyArg});`);
+
+      // !!!对于 void 类型，调用 client 方法并忽略返回值
+      if (isVoid) {
+        if (isMultipart && hasBody) {
+          funcs.push(
+            `    return client.${methodCall}(${urlArg}, data).then(() => {});`,
+          );
+        } else {
+          funcs.push(
+            `    return client.${methodCall}(${urlArg}${bodyArg}).then(() => {});`,
+          );
+        }
+      } else {
+        if (isMultipart && hasBody) {
+          funcs.push(`    return client.${methodCall}(${urlArg}, data);`);
+        } else {
+          funcs.push(`    return client.${methodCall}(${urlArg}${bodyArg});`);
+        }
+      }
       funcs.push(`  },`);
     }
 
     const imports = Array.from(types)
       .filter((t) => t !== "ResultVoid")
       .join(", ");
-    if (imports) lines.push(`import type { ${imports} } from '../types';`);
+    if (imports) {
+      lines.push(
+        `import type { Result${imports ? `, ${imports}` : ""} } from '../types';`,
+      );
+    } else {
+      lines.push(`import type { Result } from '../types';`);
+    }
 
     lines.push("", `export const ${apiName} = {`, ...funcs, "};");
 
@@ -198,13 +261,13 @@ async function main() {
     if (!fs.existsSync(path.dirname(TYPES_FILE)))
       fs.mkdirSync(path.dirname(TYPES_FILE), { recursive: true });
     fs.writeFileSync(TYPES_FILE, generateTypes(schemas));
-    console.log("@类型:", TYPES_FILE);
+    console.log("✅ 类型文件已生成:", TYPES_FILE);
 
     generateModules(doc);
-    console.log("@模块:", MODULES_DIR);
-    console.log("@完成");
+    console.log("✅ 模块文件已生成:", MODULES_DIR);
+    console.log("✅ 生成完成");
   } catch (e) {
-    console.error("@", e);
+    console.error("❌ 错误:", e);
   }
 }
 

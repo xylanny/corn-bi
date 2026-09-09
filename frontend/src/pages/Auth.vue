@@ -209,6 +209,8 @@ async function handleSubmit() {
   display: flex;
   justify-content: center;
   align-items: center;
+
+  color: var(--clr);
   background: var(--bg);
 }
 
@@ -312,7 +314,7 @@ async function handleSubmit() {
   border: 1px solid black;
   border-radius: 1rem;
   background: var(--bg-darker);
-  color: var(--ft-clr);
+  color: var(--clr);
   font-size: 0.9rem;
   white-space: nowrap;
   cursor: pointer;
@@ -337,7 +339,7 @@ async function handleSubmit() {
   padding: 0.8rem 1.2rem;
   border-radius: 0.4rem;
   background: var(--bg-darkest);
-  color: var(--ft-clr);
+  color: var(--clr);
   cursor: pointer;
 }
 .auth-actions button:first-child {

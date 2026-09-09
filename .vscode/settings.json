@@ -1,5 +1,17 @@
 {
-  "cSpell.words": ["buaich", "pinia", "vueuse", "xylanny"],
+  "cSpell.words": [
+    "buaich",
+    "defval",
+    "echarts",
+    "Kmeans",
+    "nums",
+    "officedocument",
+    "openxmlformats",
+    "pinia",
+    "spreadsheetml",
+    "vueuse",
+    "xylanny"
+  ],
   "files.associations": {
     "CODEOWNERS": "plaintext"
   }

@@ -44,9 +44,6 @@ export const useThemeStore = defineStore("theme", () => {
     }
   });
 
-  // 初始化
-  applyTheme();
-
   return {
     mode,
     actualTheme,
@@ -54,5 +51,6 @@ export const useThemeStore = defineStore("theme", () => {
     isLight,
     isSystem,
     setTheme,
+    applyTheme,
   };
 });
