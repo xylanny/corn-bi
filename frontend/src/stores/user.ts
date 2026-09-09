@@ -1,5 +1,10 @@
 import { userAPI } from "@/api/modules/user";
-import type { UserLoginDTO, UserRegisterDTO, UserVO } from "@/api/types";
+import type {
+  UserLoginDTO,
+  UserRegisterDTO,
+  UserUpdateDTO,
+  UserVO,
+} from "@/api/types";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
@@ -97,6 +102,17 @@ export const useUserStore = defineStore("user", () => {
     userAPI.sendEmailCode({ userEmail: param });
   }
 
+  async function update(param: UserUpdateDTO) {
+    const responseBody = await userAPI.update(param);
+
+    if (responseBody.code === 20000) {
+      user.value = responseBody.data;
+      return;
+    }
+
+    throw new Error(responseBody.message || "更新用户信息失败");
+  }
+
   return {
     user,
     login,
@@ -104,5 +120,6 @@ export const useUserStore = defineStore("user", () => {
     register,
     resume,
     getEmailCode,
+    update,
   };
 });

@@ -68,7 +68,7 @@ import { useRouter } from "vue-router";
 
 const userStore = useUserStore();
 const { user } = storeToRefs(userStore);
-const { logout } = userStore;
+const { logout, update } = userStore;
 const userPart = computed(() => {
   const { token, userAvatar, ...userPart } = user.value as UserVO;
   return userPart;
@@ -104,7 +104,7 @@ async function changeAvatar(file: File) {
     console.log("base64:", base64);
 
     // 发送后端
-    // await update({ userAvatar: base64 });
+    await update({ userAvatar: base64 });
 
     // 若上传头像成功，则乐观更新
     user.value!.userAvatar = base64;

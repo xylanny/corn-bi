@@ -1,16 +1,12 @@
-
 export interface Result<T = any> {
   code: number;
   message: string;
   data: T;
 }
 
-export interface UserRegisterDTO {
-  userName: string;
-  userEmail: string;
-  emailCode: string;
-  userPassword: string;
-  checkedPassword: string;
+export interface UserUpdateDTO {
+  userName?: string;
+  userAvatar?: string;
 }
 
 export interface ResultUserVO {
@@ -28,6 +24,14 @@ export interface UserVO {
   createTime: string;
   updateTime: string;
   token: string;
+}
+
+export interface UserRegisterDTO {
+  userName: string;
+  userEmail: string;
+  emailCode: string;
+  userPassword: string;
+  checkedPassword: string;
 }
 
 export interface UserLoginDTO {
