@@ -1,11 +1,11 @@
-import client from '@/api/client';
-import type { ResultUserVO, UserRegisterDTO, UserLoginDTO } from '../types';
+import client from "@/api/client";
+import type { ResultUserVO, UserRegisterDTO, UserLoginDTO } from "../types";
 
 export const userAPI = {
   register: (data: UserRegisterDTO): Promise<ResultUserVO> => {
     return client.post(`/user/register`, data);
   },
-  sendEmailCode: (query: { userEmail?: string } = {}): Promise<void> => {
+  sendEmailCode: (query: { userEmail?: string } = {}): Promise<any> => {
     return client.post(`/user/mail?userEmail=${query.userEmail}`);
   },
   login: (data: UserLoginDTO): Promise<ResultUserVO> => {

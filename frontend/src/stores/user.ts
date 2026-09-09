@@ -59,8 +59,8 @@ export const useUserStore = defineStore("user", () => {
   async function get(): Promise<void> {
     const responseBody = await userAPI.getUserByAuthorization();
 
-    if (responseBody.code === 0) {
-      return;
+    if (responseBody.code === 20000) {
+      user.value = responseBody.data;
     }
 
     throw new Error(responseBody.message ?? "restore session failure");
