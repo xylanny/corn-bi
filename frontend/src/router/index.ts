@@ -14,6 +14,8 @@ const routes: RouteRecordRaw[] = [
     path: "/auth",
     name: "auth",
     component: () => import("@/pages/Auth.vue"),
+    // 将查询参数变成组件props
+    props: (route) => ({ query: route.query }),
   },
 ];
 

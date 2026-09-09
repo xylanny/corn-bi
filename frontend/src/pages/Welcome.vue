@@ -21,8 +21,12 @@
       </RouterLink>
 
       <nav class="header-actions">
-        <button type="button" class="button darker">Login</button>
-        <button type="button" class="button">Register</button>
+        <button type="button" class="button darker" @click="goToAuth('login')">
+          Login
+        </button>
+        <button type="button" class="button" @click="goToAuth('register')">
+          Register
+        </button>
       </nav>
     </header>
 
@@ -42,7 +46,17 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useRouter } from "vue-router";
+
+type AuthMode = "login" | "register";
+
+const router = useRouter();
+
+function goToAuth(mode: AuthMode) {
+  router.push({ name: "auth", query: { mode } });
+}
+</script>
 
 <style scoped>
 .welcome {

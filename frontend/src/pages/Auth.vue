@@ -73,7 +73,10 @@
 import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
 import { computed, ref } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
+
+//  接收查询参数
+const props = defineProps(["query"]);
 
 const userStore = useUserStore();
 const { user } = storeToRefs(userStore);
@@ -165,9 +168,8 @@ function clearCountdown() {
 
 type AuthMode = "login" | "register";
 const showed = ref(true);
-const route = useRoute();
 const mode = ref<AuthMode>(
-  route.query.mode === "register" ? "register" : "login",
+  props.query.mode === "register" ? "register" : "login",
 );
 const title = computed(() => (mode.value === "login" ? "Login" : "Register"));
 function toggleMode() {
