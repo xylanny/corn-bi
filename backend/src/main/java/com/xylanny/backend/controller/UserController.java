@@ -1,9 +1,7 @@
 package com.xylanny.backend.controller;
 
-import com.xylanny.backend.model.dto.Result;
-import com.xylanny.backend.model.dto.UserLoginDTO;
-import com.xylanny.backend.model.dto.UserRegisterDTO;
-import com.xylanny.backend.model.dto.UserVO;
+import com.xylanny.backend.model.dto.*;
+import com.xylanny.backend.model.entity.User;
 import com.xylanny.backend.service.UserService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -50,7 +48,7 @@ public class UserController {
         return Result.success(userVO);
     }
 
-    @PostMapping("/message")
+    @PostMapping("/info")
     @SecurityRequirement(name = "bearerAuth")
     public Result<UserVO> getUserByAuthorization(HttpServletRequest request){
         String authorization = request.getHeader("Authorization");
@@ -59,4 +57,11 @@ public class UserController {
 
         return Result.success(userVO);
     }
+
+//    @PostMapping("/update")
+//    public Result<UserVO> update(@RequestBody UserUpdateDTO userUpdateDTO, HttpServletRequest request){
+//         String authorization = request.getHeader("Authorization");
+//
+//         UserVO userVO = userService.getUserByAuthorization(authorization);
+//    }
 }
