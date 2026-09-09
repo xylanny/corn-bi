@@ -10,6 +10,11 @@ const routes: RouteRecordRaw[] = [
     name: "root",
     component: () => import("@/pages/Welcome.vue"),
   },
+  {
+    path: "/auth",
+    name: "auth",
+    component: () => import("@/pages/Auth.vue"),
+  },
 ];
 
 const router = createRouter({
