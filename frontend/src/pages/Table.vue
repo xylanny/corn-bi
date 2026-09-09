@@ -1,7 +1,7 @@
 <template>
   <section class="table">
     <header class="table-toolbar">
-      <div>
+      <div class="toolbar-info">
         <p class="toolbar-name" v-if="table.fileName">{{ table.fileName }}</p>
         <p class="toolbar-name" v-else>Upload a CSV or Excel file</p>
       </div>
@@ -389,6 +389,7 @@ onUnmounted(() => {
 
 .table-toolbar {
   min-width: 0;
+  padding: var(--padding);
 
   flex-shrink: 0;
   display: flex;
@@ -397,7 +398,7 @@ onUnmounted(() => {
   gap: var(--ft-sz);
   flex-wrap: wrap;
 }
-.toolbar-name {
+.toolbar-info {
   color: gray;
   font-size: var(--ft-clr);
   font-style: italic;
