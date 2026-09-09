@@ -29,7 +29,11 @@
         <div class="heading-avatar">
           <Avatar
             :size="128"
-            :src="`data:image/jpeg;base64,${user?.userAvatar}`"
+            :src="
+              user?.userAvatar
+                ? `data:image/jpeg;base64,${user?.userAvatar}`
+                : ''
+            "
             @change="changeAvatar"
           />
         </div>
