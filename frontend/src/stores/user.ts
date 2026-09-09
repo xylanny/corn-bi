@@ -61,6 +61,7 @@ export const useUserStore = defineStore("user", () => {
 
     if (responseBody.code === 20000) {
       user.value = responseBody.data;
+      return;
     }
 
     throw new Error(responseBody.message ?? "restore session failure");
