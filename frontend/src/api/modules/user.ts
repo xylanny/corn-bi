@@ -1,5 +1,11 @@
-import client from '@/api/client';
-import type { Result, UserVO, UserUpdateDTO, UserRegisterDTO, UserLoginDTO } from '../types';
+import client from "@/api/client";
+import type {
+  Result,
+  UserVO,
+  UserUpdateDTO,
+  UserRegisterDTO,
+  UserLoginDTO,
+} from "../types";
 
 export const userAPI = {
   update: (data: UserUpdateDTO): Promise<Result<UserVO>> => {

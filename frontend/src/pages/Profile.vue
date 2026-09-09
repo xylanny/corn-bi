@@ -45,7 +45,13 @@
             <span class="detail-label">{{
               key.startsWith("user") ? key.slice(4) : key
             }}</span>
-            <span class="detail-value">{{ value ?? "-" }}</span>
+            <span class="detail-value">{{
+              value
+                ? key.endsWith("Time")
+                  ? formatDate(new Date(value), "YYYY-MM-DD HH:mm:ss")
+                  : value
+                : "-"
+            }}</span>
           </div>
         </template>
       </div>
@@ -61,6 +67,7 @@
 import type { UserVO } from "@/api/types";
 import Avatar from "@/components/Avatar.vue";
 import { useUserStore } from "@/stores/user";
+import { formatDate } from "@/utils/formater";
 import { transformFileToBase64WithCompression } from "@/utils/transformer";
 import { storeToRefs } from "pinia";
 import { computed } from "vue";

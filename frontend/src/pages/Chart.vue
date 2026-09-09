@@ -126,7 +126,7 @@
           </div>
 
           <div class="part-chart">
-            <Chart
+            <EChart
               v-if="!chartLoading && !chartError && chartData.length > 0"
               :name="form.chartName"
               :type="form.chartType"
@@ -211,7 +211,7 @@ import { CHART_TYPE } from "@/types/constants";
 import { useTableStore } from "@/stores/table";
 import { useChartStore } from "@/stores/chart";
 import { storeToRefs } from "pinia";
-import Chart from "@/components/Chart.vue";
+import EChart from "@/components/EChart.vue";
 import { isNonNumeric } from "@/utils/judger";
 
 const tableStore = useTableStore();

@@ -1,4 +1,3 @@
-
 export interface Result<T = any> {
   code: number;
   message: string;
@@ -6,8 +5,8 @@ export interface Result<T = any> {
 }
 
 export interface UserUpdateDTO {
-  userName: string;
-  userAvatar: string;
+  userName?: string;
+  userAvatar?: string;
 }
 
 export interface ResultUserVO {
