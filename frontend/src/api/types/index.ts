@@ -62,3 +62,22 @@ export interface ResultKMeansVO {
   message: string;
   data: KMeansVO;
 }
+
+export interface ChartAnalysisDTO {
+  file: string;
+  x: string;
+  y: string;
+  chartType: string;
+  chartGoal: string;
+}
+
+export interface ChartAnalysisVO {
+  process: string;
+  chartConclusion: string;
+}
+
+export interface ResultChartAnalysisVO {
+  code: number;
+  message: string;
+  data: ChartAnalysisVO;
+}

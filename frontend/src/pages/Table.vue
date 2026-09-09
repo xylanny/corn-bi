@@ -602,7 +602,7 @@ onUnmounted(() => {
 
 .table-show tbody > tr > td input:focus {
   border-color: var(--clr);
-  background: white;
+  background: var(--bg-darker);
 }
 
 .table-show tbody > tr > td input:hover {

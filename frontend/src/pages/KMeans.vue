@@ -221,13 +221,13 @@ function clearResult() {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  color: var(--clr);
 }
 
 .kmeans-form,
 .kmeans-result {
   min-height: 0;
   flex: 1;
-  padding: var(--padding);
 
   display: flex;
   flex-direction: column;

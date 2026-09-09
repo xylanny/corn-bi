@@ -37,6 +37,10 @@ const routes: RouteRecordRaw[] = [
         path: "k-means",
         component: () => import("@/pages/KMeans.vue"),
       },
+      {
+        path: "chart",
+        component: () => import("@/pages/Chart.vue"),
+      },
     ],
   },
   {
