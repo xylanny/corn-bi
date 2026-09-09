@@ -47,6 +47,9 @@
 </template>
 
 <script setup lang="ts">
+import { useUserStore } from "@/stores/user";
+import { storeToRefs } from "pinia";
+import { onMounted } from "vue";
 import { useRouter } from "vue-router";
 
 type AuthMode = "login" | "register";
@@ -56,6 +59,16 @@ const router = useRouter();
 function goToAuth(mode: AuthMode) {
   router.push({ name: "auth", query: { mode } });
 }
+
+onMounted(async () => {
+  const userStore = useUserStore();
+  const { user } = storeToRefs(userStore);
+  const isAuthenticated = await userStore.resume();
+
+  if (isAuthenticated || user.value) {
+    router.replace("/board");
+  }
+});
 </script>
 
 <style scoped>
