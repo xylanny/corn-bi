@@ -39,7 +39,7 @@ export const useChartStore = defineStore("chart", () => {
 
     try {
       const responseBody = await chartAPI.generateConclusionByAi(
-        formData as unknown as ChartAnalysisDTO,
+        formData as ChartAnalysisDTO,
       );
 
       if (responseBody.code !== 20000 || !responseBody.data) {

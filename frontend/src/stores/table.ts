@@ -185,9 +185,7 @@ export const useTableStore = defineStore("table", () => {
     }
 
     // 接收服务器返回的请求体
-    const responseBody = await tableAPI.analysisByKmeans(
-      formData as unknown as KMeansDTO,
-    );
+    const responseBody = await tableAPI.analysisByKmeans(formData as KMeansDTO);
 
     if (responseBody.code !== 20000) {
       throw new Error(responseBody.message ?? "K-Means analysis failed");
