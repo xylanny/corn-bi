@@ -28,4 +28,16 @@
     --transition: all 0.25s ease;
 }
 
-:root.dark {}
+:root.dark {
+    --bg: oklch(22% 0.005 260);
+    --bg-lighter: oklch(26% 0.008 260);
+    --bg-lightest: oklch(30% 0.01 260);
+    --bg-darker: oklch(18% 0.005 260);
+    --bg-darkest: oklch(14% 0.005 260);
+
+    --border: 1px solid oklch(35% 0.01 260);
+    --boarder-darker: 1px solid oklch(28% 0.01 260);
+    --border-darkest: 1px solid oklch(22% 0.01 260);
+
+    --clr: oklch(92% 0.005 80);
+}

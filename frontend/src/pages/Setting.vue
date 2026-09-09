@@ -68,6 +68,9 @@ function selectTheme(value: "system" | "light" | "dark") {
   align-items: center;
   justify-content: space-between;
 }
+.theme-label {
+  color: var(--clr);
+}
 .theme-select {
   position: relative;
   min-width: 120px;
@@ -76,7 +79,7 @@ function selectTheme(value: "system" | "light" | "dark") {
   width: 100%;
   padding: var(--padding);
 
-  color: var(--ft-clr);
+  color: var(--clr);
   text-align: center;
   cursor: pointer;
   background: var(--bg-darker);
