@@ -14,10 +14,10 @@ springdoc:
 # 邮箱操作配置
 spring:
   mail:
-    host: ${MAIL_HOST:smtp.qq.com} # 指定QQ邮箱的SMTP服务器地址
-    port: ${MAIL_PORT:587} # 连接端口
-    username: ${MAIL_USERNAME:2597466845@qq.com} # 接收发件人邮箱账号
-    password: ${MAIL_PASSWORD:sqkrreazodtdebdi} # 接收授权码
+    host: ${MAIL_HOST} # 指定QQ邮箱的SMTP服务器地址
+    port: ${MAIL_PORT} # 连接端口
+    username: ${MAIL_USERNAME} # 接收发件人邮箱账号
+    password: ${MAIL_PASSWORD} # 接收授权码
     properties:
       mail:
         smtp:
