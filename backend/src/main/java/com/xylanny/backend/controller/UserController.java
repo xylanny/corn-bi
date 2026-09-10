@@ -6,11 +6,8 @@ import com.xylanny.backend.service.UserService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.beans.BeanUtils;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
@@ -48,7 +45,7 @@ public class UserController {
         return Result.success(userVO);
     }
 
-    @PostMapping("/info")
+    @GetMapping("/info")
     @SecurityRequirement(name = "bearerAuth")
     public Result<UserVO> getUserByAuthorization(HttpServletRequest request){
         String authorization = request.getHeader("Authorization");
@@ -58,10 +55,19 @@ public class UserController {
         return Result.success(userVO);
     }
 
-//    @PostMapping("/update")
-//    public Result<UserVO> update(@RequestBody UserUpdateDTO userUpdateDTO, HttpServletRequest request){
-//         String authorization = request.getHeader("Authorization");
-//
-//         UserVO userVO = userService.getUserByAuthorization(authorization);
-//    }
+    @PostMapping("/update")
+    @SecurityRequirement(name = "bearerAuth")
+    public Result<UserVO> update(@RequestBody UserUpdateDTO userUpdateDTO, HttpServletRequest request){
+         String authorization = request.getHeader("Authorization");
+
+         long userId = userService.getUserByAuthorization(authorization).getId();
+
+         User newUser = new User();
+         BeanUtils.copyProperties(userUpdateDTO, newUser);
+         newUser.setId(userId);
+
+         UserVO userVO = userService.update(newUser);
+
+         return Result.success(userVO);
+    }
 }

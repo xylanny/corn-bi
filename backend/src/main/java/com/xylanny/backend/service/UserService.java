@@ -59,4 +59,12 @@ public interface UserService  {
      * @return
      */
     public UserVO getUserByAuthorization(String authorization);
+
+    /**
+     * 更新用户信息
+     *
+     * @param user 新的用户信息
+     * @return
+     */
+    public UserVO update(User user);
 }

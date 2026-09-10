@@ -147,6 +147,40 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserVO update(User user){
+        if(user == null || user.getId() == null){
+            throw new BusinessException(BusinessCode.PARAMS_MISSING, "用户ID不能为空");
+        }
+
+        User existedUser = userMapper.selectById(user.getId());
+        if(existedUser == null){
+            throw new BusinessException(BusinessCode.USER_NOT_EXISTS);
+        }
+
+        if(StringUtils.isNotBlank(user.getUserName())){
+            existedUser.setUserName(user.getUserName());
+        }
+        if(StringUtils.isNotBlank(user.getUserEmail())){
+            existedUser.setUserEmail(user.getUserEmail());
+        }
+        if(StringUtils.isNotBlank(user.getUserPassword())){
+            existedUser.setUserPassword(user.getUserPassword());
+        }
+        if(StringUtils.isNotBlank(user.getUserAvatar())){
+            existedUser.setUserAvatar(user.getUserAvatar());
+        }
+        existedUser.setUpdateTime(new Date());
+
+        // 更新到数据库中
+        int effectiveRow = userMapper.updateById(existedUser);
+        if(effectiveRow != 1){
+            throw new BusinessException(BusinessCode.DATABASE_ERROR, "用户更新信息失败");
+        }
+
+        return this.getUserVO(existedUser);
+    }
+
+    @Override
     public UserVO getUserVO(User user) {
         if (user == null) {
             return null;
