@@ -4,6 +4,7 @@
     "defval",
     "echarts",
     "formater",
+    "keepalive",
     "Kmeans",
     "nums",
     "officedocument",
@@ -15,7 +16,8 @@
     "xylanny"
   ],
   "files.associations": {
-    "CODEOWNERS": "plaintext"
+    "CODEOWNERS": "plaintext",
+    "*.conf": "nginx"
   },
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.expand": false,
