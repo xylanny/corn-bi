@@ -3,16 +3,26 @@
     "buaich",
     "defval",
     "echarts",
+    "formater",
     "Kmeans",
     "nums",
     "officedocument",
     "openxmlformats",
     "pinia",
     "spreadsheetml",
+    "VITE",
     "vueuse",
     "xylanny"
   ],
   "files.associations": {
     "CODEOWNERS": "plaintext"
+  },
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.expand": false,
+  "explorer.fileNesting.patterns": {
+    ".env": ".env.*",
+    "package.json": "package-lock.json, yarn.lock, pnpm-lock.yaml",
+    "tsconfig.json": "tsconfig.*.json",
+    "vite.config.ts": "vite.config.*.ts"
   }
 }

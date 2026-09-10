@@ -134,7 +134,7 @@ class HTTPClient {
 }
 
 const client = new HTTPClient(
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:8080/api",
+  import.meta.env.APP_API_BASE_URL,
   new Set<string>(["/register", "/login"]),
 );
 

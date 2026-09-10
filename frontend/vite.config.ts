@@ -15,4 +15,6 @@ export default defineConfig({
     host: "0.0.0.0",
     port: 3000,
   },
+
+  envPrefix: ["VITE_", "APP_"],
 });

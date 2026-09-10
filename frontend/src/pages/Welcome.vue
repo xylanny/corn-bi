@@ -92,6 +92,7 @@ onMounted(async () => {
       transparent 24rem
     ),
     var(--bg);
+  color: var(--clr);
 }
 
 .welcome-heading {
