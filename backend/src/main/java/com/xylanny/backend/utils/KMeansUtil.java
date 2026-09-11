@@ -18,9 +18,9 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-public final class KMeansUtils {
+public final class KMeansUtil {
 
-    private KMeansUtils() {
+    private KMeansUtil() {
     }
 
     public static KMeansVO analyze(

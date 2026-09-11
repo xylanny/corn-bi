@@ -12,7 +12,7 @@ public interface UserService  {
 
 
     /**
-     * 用户注册
+     * 用户注册并校验邮箱验证码
      *
      * @param userName 用户昵称
      * @param userEmail 用户账户
@@ -20,7 +20,7 @@ public interface UserService  {
      * @param checkPassword 校验密码
      * @return 新用户信息
      */
-    UserVO register(String userName, String userEmail, String userPassword, String checkPassword);
+    UserVO register(String userName, String userEmail, String emailCode, String userPassword, String checkPassword);
 
     /**
      * 向邮箱发送注册验证码
@@ -28,12 +28,6 @@ public interface UserService  {
      * @param userEmail 收件邮箱
      */
     void sendRegisterEmailCode(String userEmail);
-
-    /**
-     * 用户注册并校验邮箱验证码
-     */
-    UserVO register(String userName, String userEmail, String emailCode,
-                    String userPassword, String checkPassword);
 
     /**
      * 用户登录
@@ -61,10 +55,11 @@ public interface UserService  {
     public UserVO getUserByAuthorization(String authorization);
 
     /**
-     * 更新用户信息
+     * 更新用户信息（除了用户密码）
      *
      * @param user 新的用户信息
      * @return
      */
     public UserVO update(User user);
+
 }
