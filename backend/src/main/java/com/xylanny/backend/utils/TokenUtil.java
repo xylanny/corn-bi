@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TokenUtils {
+public class TokenUtil {
 
     // JWT Payload中存储用户ID的键名
     private static final String USER_ID_CLAIM = "userId";
