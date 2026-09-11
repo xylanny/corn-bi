@@ -9,7 +9,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./mysql/data:/var/lib/mysql
-      - ./backend/init/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     networks:
       - app-network
     healthcheck:
